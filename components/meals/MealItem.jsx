@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import classes from './MealItem.module.css';
 
 const MealItem = ({ title, slug, image, summary, creator }) => {
   return (
