@@ -1,6 +1,7 @@
 'use server';
 
 import { saveMeal } from '@/lib/meals';
+import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
 const isInvalidText = text => !text || text.trim() === '';
@@ -31,6 +32,6 @@ export const shareMeal = async (prevState, formData) => {
   }
 
   await saveMeal(meal);
-
+  revalidatePath('/meals');
   redirect('/meals');
 };
