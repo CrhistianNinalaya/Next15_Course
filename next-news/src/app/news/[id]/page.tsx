@@ -2,6 +2,7 @@
 import { DUMMY_NEWS } from '@/dummy-news';
 import { NextPage } from 'next';
 import Image from 'next/image';
+import { notFound } from 'next/navigation';
 import { use } from 'react';
 
 interface Params {
@@ -12,6 +13,10 @@ const NewsDetailsPage: NextPage<{ params: Promise<Params> }> = ({ params }) => {
   const { id } = use(params);
 
   const newsItem = DUMMY_NEWS.find((news) => news?.id === id);
+
+  if (!newsItem) {
+    notFound();
+  }
 
   return (
     <article className="news-article">
