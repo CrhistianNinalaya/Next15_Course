@@ -37,15 +37,20 @@ const FilteredNewsPage: NextPage<{ params: Promise<Params> }> = ({ params }) => 
     newsContent = <NewsList news={news} />;
   }
 
+  if (
+    (selectedYear && !getAvailableNewsYears().includes(Number(selectedYear))) ||
+    (selectedMonth && !getAvailableNewsMonths(Number(selectedYear)).includes(Number(selectedMonth)))
+  ) {
+    throw new Error('Invalid filter');
+  }
+
   return (
     <>
       <header id="archive-header">
         <nav>
           <ul>
             {links.map((link) => {
-              const href = selectedYear
-                ? `/archive/${selectedYear}/${link}`
-                : `/archive/${link}`;
+              const href = selectedYear ? `/archive/${selectedYear}/${link}` : `/archive/${link}`;
               return (
                 <li key={link}>
                   <Link href={href}>{link}</Link>
