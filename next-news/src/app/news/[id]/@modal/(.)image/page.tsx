@@ -1,11 +1,13 @@
+"use client"
 import { DUMMY_NEWS } from '@/dummy-news';
 import Image from 'next/image';
-import { notFound } from 'next/navigation';
+import { notFound, useRouter } from 'next/navigation';
 import { use } from 'react';
 import { Params } from '../../page';
 
 const InterceptedImagePage = ({ params }: { params: Promise<Params> }) => {
   const { id } = use(params);
+  const router = useRouter();  
 
   const newsItem = DUMMY_NEWS.find((news) => news?.id === id);
 
@@ -14,7 +16,7 @@ const InterceptedImagePage = ({ params }: { params: Promise<Params> }) => {
   }
   return (
     <>
-      <div className="modal-backdrop">
+      <div className="modal-backdrop" onClick={router.back}>
         <dialog className="modal" open>
           <div className="fullscreen-image">
             <Image              
