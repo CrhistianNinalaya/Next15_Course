@@ -2,7 +2,7 @@ import { DUMMY_NEWS } from '@/dummy-news';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { use } from 'react';
-import { Params } from '../page';
+import { Params } from '../../page';
 
 const InterceptedImagePage = ({ params }: { params: Promise<Params> }) => {
   const { id } = use(params);
