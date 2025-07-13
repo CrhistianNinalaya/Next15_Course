@@ -1,45 +1,45 @@
 import NewsList from '@/components/NewsList/NewsList';
+import { News } from '@/interface/News';
 import {
   getAvailableNewsMonths,
   getAvailableNewsYears,
   getNewsForYear,
   getNewsForYearAndMonth,
 } from '@/lib/news';
-import { NextPage } from 'next';
 import Link from 'next/link';
-import { use } from 'react';
-
 interface Params {
   filter: string[];
 }
 
-const FilteredNewsPage: NextPage<{ params: Promise<Params> }> = ({ params }) => {
-  const { filter } = use(params);
-
+const FilteredNewsPage = async ({ params }: { params: Promise<Params> }) => {
+  const { filter } = await params;
+  console.log('Filter params:', filter);
   const selectedYear = filter?.[0];
   const selectedMonth = filter?.[1];
 
   let news;
-  let links = getAvailableNewsYears();
+  let links = (await getAvailableNewsYears()) as News[];
 
   if (selectedYear && !selectedMonth) {
-    news = getNewsForYear(Number(selectedYear));
-    links = getAvailableNewsMonths(Number(selectedYear));
+    news = await getNewsForYear(selectedYear);
+    links = getAvailableNewsMonths(selectedYear);
   }
 
   if (selectedYear && selectedMonth) {
-    news = getNewsForYearAndMonth(Number(selectedYear), Number(selectedMonth));
+    news = await getNewsForYearAndMonth(selectedYear, selectedMonth);
     links = [];
   }
 
-  let newsContent = <p>No news found for the selected filter</p>;
+  let newsContent = <p>No news found for the selected period.</p>;
   if (news && news.length > 0) {
     newsContent = <NewsList news={news} />;
   }
 
+  const availableYears = await getAvailableNewsYears();
+
   if (
-    (selectedYear && !getAvailableNewsYears().includes(Number(selectedYear))) ||
-    (selectedMonth && !getAvailableNewsMonths(Number(selectedYear)).includes(Number(selectedMonth)))
+    (selectedYear && !availableYears.includes(selectedYear)) ||
+    (selectedMonth && !getAvailableNewsMonths(selectedYear).includes(selectedMonth))
   ) {
     throw new Error('Invalid filter');
   }
@@ -50,10 +50,13 @@ const FilteredNewsPage: NextPage<{ params: Promise<Params> }> = ({ params }) => 
         <nav>
           <ul>
             {links.map((link) => {
-              const href = selectedYear ? `/archive/${selectedYear}/${link}` : `/archive/${link}`;
+              const linkKey = typeof link === 'object' && 'date' in link ? link.date : link;
+              const href = selectedYear
+                ? `/archive/${selectedYear}/${linkKey}`
+                : `/archive/${linkKey}`;
               return (
-                <li key={link}>
-                  <Link href={href}>{link}</Link>
+                <li key={linkKey}>
+                  <Link href={href}>{linkKey}</Link>
                 </li>
               );
             })}

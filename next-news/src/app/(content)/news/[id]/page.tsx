@@ -1,19 +1,17 @@
-'use client';
-import { DUMMY_NEWS } from '@/dummy-news';
-import { NextPage } from 'next';
+import { News } from '@/interface/News';
+import { getNewsItem } from '@/lib/news';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { use } from 'react';
 
 export interface Params {
   id: string;
 }
 
-const NewsDetailsPage: NextPage<{ params: Promise<Params> }> = ({ params }) => {
-  const { id } = use(params);
-
-  const newsItem = DUMMY_NEWS.find((news) => news?.id === id);
+const NewsDetailsPage = async ({ params }: { params: Promise<Params> }) => {
+  const { id } = await params;
+  console.log('Fetching news item with ID:', id);
+  const newsItem = (await getNewsItem(id)) as News;
 
   if (!newsItem) {
     notFound();

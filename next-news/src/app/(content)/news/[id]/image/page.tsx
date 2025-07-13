@@ -1,13 +1,13 @@
-import { DUMMY_NEWS } from '@/dummy-news';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
-import { use } from 'react';
 import { Params } from '../page';
+import { getNewsItem } from '@/lib/news';
+import { News } from '@/interface/News';
 
-const ImagePage = ({ params }: { params: Promise<Params> }) => {
-  const { id } = use(params);
+const ImagePage = async ({ params }: { params: Promise<Params> }) => {
+  const { id } = await params;
 
-  const newsItem = DUMMY_NEWS.find((news) => news?.id === id);
+  const newsItem = (await getNewsItem(id)) as News;
 
   if (!newsItem) {
     notFound();

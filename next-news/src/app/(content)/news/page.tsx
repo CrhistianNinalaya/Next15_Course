@@ -1,5 +1,5 @@
 import NewsList from '@/components/NewsList/NewsList';
-import { News as NewsInterface } from '@/dummy-news';
+import { News as NewsInterface } from '@/interface/News';
 import { getAllNews } from '@/lib/news';
 
 const News = async () => {
