@@ -1,13 +1,12 @@
-import { News } from '@/dummy-news';
+import { News } from '@/interface/News';
 import Image from 'next/image';
 import Link from 'next/link';
-
 
 interface NewsListProps {
   news: News[];
 }
 
-const NewsList: React.FC<NewsListProps> = ({ news }) => {
+const NewsList = ({ news }: NewsListProps) => {
   return (
     <ul className="news-list">
       {news.map((newsItem) => (
