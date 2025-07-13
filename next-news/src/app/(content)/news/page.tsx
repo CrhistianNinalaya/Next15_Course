@@ -1,11 +1,13 @@
 import NewsList from '@/components/NewsList/NewsList';
-import { DUMMY_NEWS } from '@/dummy-news';
+import { News as NewsInterface } from '@/dummy-news';
+import { getAllNews } from '@/lib/news';
 
-const News: React.FC = () => {
+const News = async () => {
+  const news = (await getAllNews()) as NewsInterface[];
   return (
     <>
       <h1>News Page </h1>
-      <NewsList news={DUMMY_NEWS} />;
+      <NewsList news={news} />
     </>
   );
 };
